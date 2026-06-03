@@ -21,10 +21,6 @@ Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog');
 Route::get('/mobil/{slug}', [MobilController::class, 'show'])->name('mobil.show');
 Route::get('/bandingkan', [BandingkanController::class, 'index'])->name('bandingkan');
 
-// Booking
-Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
-Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
-Route::get('/booking/sukses/{booking}', [BookingController::class, 'sukses'])->name('booking.sukses');
 
 // Static pages
 Route::view('/tentang', 'pages.tentang')->name('tentang');
@@ -39,6 +35,11 @@ Route::middleware('auth')->group(function () {
 
     // Riwayat Booking
     Route::get('/riwayat-booking', [BookingController::class, 'history'])->name('booking.history');
+
+    // Booking Test Drive
+    Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
+    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+    Route::get('/booking/sukses/{booking}', [BookingController::class, 'sukses'])->name('booking.sukses');
 });
 
 // ─── Admin Routes (protected) ────────────────────────────────────────────────
@@ -80,6 +81,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 });
 
 // Redirect /login and /dashboard (Breeze default) to admin
-Route::get('/dashboard', fn() => redirect()->route('admin.dashboard'))->middleware('auth');
+Route::get('/dashboard', fn() => redirect()->route('admin.dashboard'))->middleware('auth')->name('dashboard');
 
 require __DIR__.'/auth.php';

@@ -48,7 +48,7 @@ class BookingController extends Controller
 
         if ($booking->mobil) {
             if ($request->status === 'dikonfirmasi') {
-                $booking->mobil->update(['status' => 'direservasi']);
+                $booking->mobil->update(['status' => 'reservasi']);
             } elseif ($request->status === 'dibatalkan') {
                 $booking->mobil->update(['status' => 'tersedia']);
             } elseif ($request->status === 'selesai') {
@@ -69,26 +69,33 @@ class BookingController extends Controller
 
         $bookings = $query->latest()->get();
 
-        $csv  = "ID,Nama Pembeli,No HP,Unit,Tahun,Tanggal Test Drive,Jam,Status,Catatan,Catatan Admin,Dibuat\n";
-        foreach ($bookings as $b) {
-            $csv .= implode(',', [
-                $b->id,
-                '"' . $b->nama_pembeli . '"',
-                $b->no_hp,
-                '"' . ($b->mobil->nama_mobil ?? '-') . '"',
-                $b->mobil->tahun ?? '-',
-                $b->tanggal_test_drive->format('d/m/Y'),
-                Booking::$slotJam[$b->jam_preferred] ?? $b->jam_preferred,
-                Booking::$statusLabel[$b->status] ?? $b->status,
-                '"' . ($b->catatan ?? '') . '"',
-                '"' . ($b->catatan_admin ?? '') . '"',
-                $b->created_at->format('d/m/Y H:i'),
-            ]) . "\n";
-        }
+        $html  = '<table border="1">';
+        $html .= '<thead><tr>';
+        $html .= '<th>ID</th><th>Nama Pembeli</th><th>No HP</th><th>Unit</th><th>Tahun</th>';
+        $html .= '<th>Tanggal Test Drive</th><th>Jam</th><th>Status</th><th>Catatan</th>';
+        $html .= '<th>Catatan Admin</th><th>Dibuat</th>';
+        $html .= '</tr></thead><tbody>';
 
-        return response($csv, 200, [
-            'Content-Type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="bookings-' . now()->format('Ymd') . '.csv"',
+        foreach ($bookings as $b) {
+            $html .= '<tr>';
+            $html .= '<td>' . $b->id . '</td>';
+            $html .= '<td>' . htmlspecialchars($b->nama_pembeli) . '</td>';
+            $html .= '<td>="' . htmlspecialchars($b->no_hp) . '"</td>'; // prevent scientific notation
+            $html .= '<td>' . htmlspecialchars($b->mobil->nama_mobil ?? '-') . '</td>';
+            $html .= '<td>' . ($b->mobil->tahun ?? '-') . '</td>';
+            $html .= '<td>' . $b->tanggal_test_drive->format('d/m/Y') . '</td>';
+            $html .= '<td>' . (Booking::$slotJam[$b->jam_preferred] ?? $b->jam_preferred) . '</td>';
+            $html .= '<td>' . (Booking::$statusLabel[$b->status] ?? $b->status) . '</td>';
+            $html .= '<td>' . htmlspecialchars($b->catatan ?? '') . '</td>';
+            $html .= '<td>' . htmlspecialchars($b->catatan_admin ?? '') . '</td>';
+            $html .= '<td>' . $b->created_at->format('d/m/Y H:i') . '</td>';
+            $html .= '</tr>';
+        }
+        $html .= '</tbody></table>';
+
+        return response($html, 200, [
+            'Content-Type'        => 'application/vnd.ms-excel',
+            'Content-Disposition' => 'attachment; filename="bookings-' . now()->format('Ymd') . '.xls"',
         ]);
     }
 }

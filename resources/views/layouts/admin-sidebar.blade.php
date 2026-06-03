@@ -17,7 +17,7 @@
                 ['route' => 'admin.dashboard', 'icon' => 'layout-dashboard', 'label' => 'Dashboard'],
                 ['route' => 'admin.banner.index', 'icon' => 'image', 'label' => 'Banner'],
                 ['route' => 'admin.merek.index', 'icon' => 'tag', 'label' => 'Merek'],
-                ['route' => 'admin.kategori.index', 'icon' => 'shapes', 'label' => 'Kategori'],
+                ['route' => 'admin.kategori.index', 'icon' => 'layers', 'label' => 'Kategori'],
                 ['route' => 'admin.mobil.index', 'icon' => 'car', 'label' => 'Mobil'],
                 ['route' => 'admin.booking.index', 'icon' => 'calendar', 'label' => 'Booking'],
                 ['route' => 'admin.settings', 'icon' => 'settings', 'label' => 'Pengaturan'],

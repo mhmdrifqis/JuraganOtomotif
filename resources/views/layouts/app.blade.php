@@ -7,6 +7,9 @@
 
     {{-- SEO --}}
     <title>@yield('title', config('app.name'))</title>
+    @if($favicon = \App\Models\Setting::get('logo_path'))
+    <link rel="icon" href="{{ asset('storage/' . $favicon) }}">
+    @endif
     <meta name="description" content="@yield('meta_desc', \App\Models\Setting::get('meta_desc_home'))">
     <meta name="robots" content="index, follow">
 
@@ -170,7 +173,11 @@
             </div>
         </div>
         <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:1.25rem; text-align:center;">
-            <p style="font-size:0.825rem; color:rgba(255,255,255,0.45);">© {{ date('Y') }} Juragan Otomotif. All rights reserved.</p>
+            <p style="font-size:0.825rem; color:rgba(255,255,255,0.45);">© {{ date('Y') }} Juragan Otomotif. All rights reserved. <br>
+                Developed by <a href="https://github.com/mhmdrifqis" target="_blank" class="underline" style="color:rgba(255,255,255,0.7); text-decoration:none;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">221011400528 Muhammad Rifqi Saifulloh </a>
+                and <a href="https://wa.me/+6281380459670" target="_blank" class="underline" style="color:rgba(255,255,255,0.7); text-decoration:none;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">221011402031 Ahmad Baihaqi</a>.
+
+            </p>
         </div>
     </div>
 </footer>
