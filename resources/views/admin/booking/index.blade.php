@@ -4,7 +4,10 @@
 @section('page_title', 'Manajemen Booking Test Drive')
 
 @section('topbar_actions')
-<a href="{{ route('admin.booking.export', request()->query()) }}" class="btn-outline btn-sm" style="display:flex; align-items:center; gap:0.25rem;"><x-lucide-download style="width:1rem;height:1rem;" /> Export Excel</a>
+<div style="display:flex; gap:0.5rem;">
+    <a href="{{ route('admin.booking.export', request()->query()) }}" class="btn-outline btn-sm" style="display:flex; align-items:center; gap:0.25rem;"><x-lucide-download style="width:1rem;height:1rem;" /> Export Excel</a>
+    <a href="{{ route('admin.booking.create') }}" class="btn-primary btn-sm" style="display:flex; align-items:center; gap:0.25rem;"><x-lucide-plus style="width:1rem;height:1rem;" /> Tambah Booking</a>
+</div>
 @endsection
 
 @section('content')

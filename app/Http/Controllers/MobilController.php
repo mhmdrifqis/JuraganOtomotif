@@ -30,7 +30,7 @@ class MobilController extends Controller
             ['[Nama Mobil]', '[Tahun]'],
             [$mobil->nama_mobil, $mobil->tahun],
             Setting::get('whatsapp_message')
-        );
+        ) . "\n\nDetail unit: " . route('mobil.show', $slug);
         $waLink = "https://wa.me/{$waNumber}?text=" . urlencode($waMessage);
 
         return view('pages.detail', compact('mobil', 'related', 'waLink'));

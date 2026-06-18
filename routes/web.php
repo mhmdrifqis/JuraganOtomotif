@@ -70,6 +70,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     // Booking management
     Route::get('/booking', [AdminBookingController::class, 'index'])->name('booking.index');
+    Route::get('/booking/create', [AdminBookingController::class, 'create'])->name('booking.create');
+    Route::post('/booking/store', [AdminBookingController::class, 'store'])->name('booking.store');
     Route::patch('/booking/{booking}', [AdminBookingController::class, 'update'])->name('booking.update');
     Route::get('/booking/export', [AdminBookingController::class, 'export'])->name('booking.export');
 

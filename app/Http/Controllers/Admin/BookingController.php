@@ -34,6 +34,38 @@ class BookingController extends Controller
         return view('admin.booking.index', compact('bookings', 'statusList'));
     }
 
+    public function create()
+    {
+        $mobils = \App\Models\Mobil::where('status', 'tersedia')->get();
+        $slotJam = Booking::$slotJam;
+        return view('admin.booking.create', compact('mobils', 'slotJam'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'mobil_id' => 'required|exists:mobil,id',
+            'nama_pembeli' => 'required|string|max:255',
+            'no_hp' => 'required|string|max:20',
+            'tanggal_test_drive' => 'required|date',
+            'jam_preferred' => 'required',
+            'catatan' => 'nullable|string'
+        ]);
+
+        Booking::create([
+            'mobil_id' => $request->mobil_id,
+            'nama_pembeli' => $request->nama_pembeli,
+            'no_hp' => $request->no_hp,
+            'tanggal_test_drive' => $request->tanggal_test_drive,
+            'jam_preferred' => $request->jam_preferred,
+            'catatan' => $request->catatan,
+            'status' => 'dikonfirmasi', // auto confirm by admin
+            'catatan_admin' => 'Dibuat oleh Admin'
+        ]);
+
+        return redirect()->route('admin.booking.index')->with('success', 'Booking berhasil ditambahkan oleh Admin.');
+    }
+
     public function update(Request $request, Booking $booking)
     {
         $request->validate([

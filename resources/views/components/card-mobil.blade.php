@@ -63,7 +63,7 @@
             <a href="{{ route('mobil.show', $mobil->slug) }}" class="btn-navy btn-sm" style="flex:1; justify-content:center;">Lihat Detail</a>
             @php
                 $waNum = \App\Models\Setting::get('whatsapp_number');
-                $waMsg = urlencode("Halo Juragan Otomotif, saya tertarik dengan {$mobil->nama_mobil} {$mobil->tahun}. Bisa info lebih lanjut?");
+                $waMsg = urlencode("Halo Juragan Otomotif, saya tertarik dengan {$mobil->nama_mobil} {$mobil->tahun}. Bisa info lebih lanjut? \n\nDetail unit: " . route('mobil.show', $mobil->slug));
             @endphp
             <a href="https://wa.me/{{ $waNum }}?text={{ $waMsg }}" target="_blank"
                class="btn-sm" style="background:#25D366; color:#fff; border-radius:0.5rem; padding:0.4rem 0.75rem; display:flex; align-items:center; justify-content:center; text-decoration:none; transition:all 0.2s; border:none;"

@@ -8,12 +8,13 @@
         <div style="padding:2.5rem; text-align:center; border-bottom:1px solid #f1f5f9;">
             @php $logo = \App\Models\Setting::get('logo_path'); @endphp
             @if($logo)
-            <img src="{{ asset('storage/' . $logo) }}" alt="Logo Juragan Otomotif" style="height:48px; width:auto; object-fit:contain; margin:0 auto 1.25rem;">
+            <img src="{{ asset('storage/' . $logo) }}" alt="Logo Juragan Otomotif" style="height:48px; width:auto; object-fit:contain; margin:0 auto 0.5rem;">
             @else
-            <div style="display:inline-flex; align-items:center; justify-content:center; width:64px; height:64px; border-radius:50%; background:var(--bg); color:var(--navy); margin-bottom:1.25rem; box-shadow:0 4px 10px rgba(0,0,0,0.05);">
+            <div style="display:inline-flex; align-items:center; justify-content:center; width:64px; height:64px; border-radius:50%; background:var(--bg); color:var(--navy); margin-bottom:0.5rem; box-shadow:0 4px 10px rgba(0,0,0,0.05);">
                 <x-lucide-user style="width:2rem;height:2rem;" />
             </div>
             @endif
+            <div style="font-family:'Poppins',sans-serif; font-weight:800; font-size:1.25rem; color:var(--navy); letter-spacing:0.05em; margin-bottom:1.25rem;">JURAGAN <span style="color:var(--orange);">OTOMOTIF</span></div>
             <h1 style="font-family:'Poppins',sans-serif; font-weight:800; color:var(--navy); font-size:1.75rem; margin-bottom:0.5rem;">Selamat Datang</h1>
             <p style="color:var(--text-muted); font-size:0.95rem;">Masuk ke akun Juragan Otomotif Anda</p>
         </div>
@@ -23,6 +24,7 @@
 
             <form method="POST" action="{{ route('login') }}" style="display:flex; flex-direction:column; gap:1.25rem;">
                 @csrf
+                <input type="text" name="username_hp" style="display:none;" tabindex="-1" autocomplete="off">
                 <div>
                     <label style="display:block; font-size:0.875rem; font-weight:600; color:var(--navy); margin-bottom:0.5rem;">Email Address</label>
                     <input type="email" name="email" value="{{ old('email') }}" required autofocus style="width:100%; padding:0.875rem 1rem; border:1px solid #cbd5e1; border-radius:0.5rem; outline:none; transition:border-color 0.2s, box-shadow 0.2s; background:#f8fafc;" onfocus="this.style.borderColor='var(--orange)'; this.style.boxShadow='0 0 0 3px rgba(232,130,26,0.1)';" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';">

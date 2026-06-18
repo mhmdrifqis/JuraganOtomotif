@@ -30,6 +30,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'username_hp' => ['prohibited'], // Honeypot field: must be empty
         ];
     }
 

@@ -628,7 +628,7 @@ h1, h2, h3, h4, h5, h6 {
     .admin-sidebar { display: none; }
     .admin-content { padding: 1rem; }
     .hero-title { font-size: 1.85rem; }
-    .brand-text { display: none !important; }
+    .brand-text { display: inline-block !important; font-size: 0.95rem; }
 }
 
 @media (max-width: 1024px) {

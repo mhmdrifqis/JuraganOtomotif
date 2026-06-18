@@ -220,12 +220,12 @@ function gallery(fotos) {
 // Compare
 let compareList = JSON.parse(localStorage.getItem('compare') || '[]');
 function tambahBandingkan(id, nama) {
-    if (compareList.length >= 3) { alert('Maksimal 3 unit.'); return; }
-    if (compareList.find(i => i.id === id)) { alert('Sudah ada di daftar.'); return; }
+    if (compareList.length >= 3) { showToast('Maksimal 3 unit.', 'error'); return; }
+    if (compareList.find(i => i.id === id)) { showToast('Sudah ada di daftar.', 'error'); return; }
     compareList.push({ id, nama });
     localStorage.setItem('compare', JSON.stringify(compareList));
     updateCompareBar();
-    alert('Tersimpan! ' + nama + ' ditambahkan ke perbandingan.');
+    showToast('Tersimpan! ' + nama + ' ditambahkan ke perbandingan.');
 }
 function clearBandingkan() { compareList = []; localStorage.setItem('compare', JSON.stringify(compareList)); updateCompareBar(); }
 function goBandingkan() { window.location.href = '{{ route("bandingkan") }}?ids=' + compareList.map(i => i.id).join(','); }

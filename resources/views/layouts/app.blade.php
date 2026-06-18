@@ -25,7 +25,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
-<body>
+<body x-data="{ openLoginDrawer: {{ $errors->has('email') || $errors->has('password') || session('status') ? 'true' : 'false' }} }">
 
 {{-- NAVBAR --}}
 <nav class="navbar" id="navbar">
@@ -79,9 +79,8 @@
                     </div>
                 @endif
             @else
-                <a href="{{ route('login') }}" class="nav-link" style="color:var(--orange) !important; display:inline-flex; align-items:center; gap:0.25rem;"><x-lucide-log-in class="w-4 h-4" style="width:1rem;height:1rem;" /> Login</a>
+                <a href="#" @click.prevent="openLoginDrawer = true" class="nav-link" style="color:var(--orange) !important; display:inline-flex; align-items:center; gap:0.25rem;"><x-lucide-log-in class="w-4 h-4" style="width:1rem;height:1rem;" /> Login</a>
             @endauth
-            <a href="{{ route('booking.create') }}" class="btn-primary btn-sm" style="margin-left:0.5rem;"><x-lucide-calendar class="w-4 h-4" style="width:1rem;height:1rem;" /> Booking Test Drive</a>
         </div>
 
         <button id="nav-toggle" style="display:none; background:none; border:none; color:#fff; cursor:pointer; padding:0.25rem;" aria-label="Menu">
@@ -114,12 +113,8 @@
                 </form>
             @endif
         @else
-            <a href="{{ route('login') }}" class="nav-link" style="display:block; padding:0.75rem 0 !important; color:var(--orange) !important; border-bottom:1px solid rgba(255,255,255,0.05);"><x-lucide-log-in class="w-4 h-4" style="width:1rem;height:1rem; display:inline-block; vertical-align:middle; margin-right:0.25rem;" /> Login</a>
+            <a href="#" @click.prevent="openLoginDrawer = true; mobileNav.style.display = 'none'" class="nav-link" style="display:block; padding:0.75rem 0 !important; color:var(--orange) !important; border-bottom:1px solid rgba(255,255,255,0.05);"><x-lucide-log-in class="w-4 h-4" style="width:1rem;height:1rem; display:inline-block; vertical-align:middle; margin-right:0.25rem;" /> Login</a>
         @endauth
-        
-        <div style="margin-top:1rem;">
-            <a href="{{ route('booking.create') }}" class="btn-primary" style="width:100%; justify-content:center;"><x-lucide-calendar style="width:1.25rem;height:1.25rem;" /> Booking Test Drive</a>
-        </div>
     </div>
 </nav>
 
@@ -213,5 +208,87 @@ window.addEventListener('scroll', () => {
 });
 </script>
 @stack('scripts')
+<script>
+function showToast(message, type = 'success') {
+    let toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.right = '20px';
+    toast.style.backgroundColor = type === 'success' ? '#1e293b' : '#ef4444';
+    toast.style.color = '#fff';
+    toast.style.padding = '12px 20px';
+    toast.style.borderRadius = '8px';
+    toast.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+    toast.style.zIndex = '9999';
+    toast.style.fontFamily = "'Poppins', sans-serif";
+    toast.style.fontSize = '0.9rem';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(20px)';
+    toast.style.transition = 'all 0.3s ease';
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; }, 10);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+<div x-show="openLoginDrawer" style="display:none;" x-cloak>
+    <div style="position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9998;" @click="openLoginDrawer = false" x-transition.opacity></div>
+    
+    <div style="position:fixed; top:0; bottom:0; right:0; width:100%; max-width:400px; background:#fff; z-index:9999; box-shadow:-5px 0 25px rgba(0,0,0,0.1); padding:2rem; overflow-y:auto; display:flex; flex-direction:column;"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="transform translate-x-full"
+         x-transition:enter-end="transform translate-x-0"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="transform translate-x-0"
+         x-transition:leave-end="transform translate-x-full">
+        
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:2rem;">
+            <div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+                    @php $logo = \App\Models\Setting::get('logo_path'); @endphp
+                    @if($logo)
+                    <img src="{{ asset('storage/' . $logo) }}" alt="Logo Juragan Otomotif" style="height:24px; width:auto; object-fit:contain;">
+                    @endif
+                    <span style="font-family:'Poppins',sans-serif; font-weight:800; font-size:1rem; color:var(--navy); letter-spacing:0.05em;">JURAGAN <span style="color:var(--orange);">OTOMOTIF</span></span>
+                </div>
+                <h2 style="font-family:'Poppins',sans-serif; font-weight:800; color:var(--navy); font-size:1.5rem;">Masuk</h2>
+            </div>
+            <button @click="openLoginDrawer = false" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--text-muted);">&times;</button>
+        </div>
+
+        <form method="POST" action="{{ route('login') }}" style="display:flex; flex-direction:column; gap:1.25rem; flex-grow:1;">
+            @csrf
+            <input type="text" name="username_hp" style="display:none;" tabindex="-1" autocomplete="off">
+            <div>
+                <label style="display:block; font-size:0.875rem; font-weight:600; color:var(--navy); margin-bottom:0.5rem;">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required style="width:100%; padding:0.75rem 1rem; border:1px solid {{ $errors->has('email') ? '#ef4444' : 'var(--border)' }}; border-radius:0.5rem; font-family:inherit; outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='{{ $errors->has('email') ? '#ef4444' : 'var(--border)' }}'">
+                @error('email')<div style="color:#ef4444; font-size:0.8rem; margin-top:0.35rem;">Email atau password yang Anda masukkan salah atau tidak terdaftar.</div>@enderror
+            </div>
+            <div>
+                <label style="display:block; font-size:0.875rem; font-weight:600; color:var(--navy); margin-bottom:0.5rem;">Password</label>
+                <input type="password" name="password" required style="width:100%; padding:0.75rem 1rem; border:1px solid {{ $errors->has('email') ? '#ef4444' : 'var(--border)' }}; border-radius:0.5rem; font-family:inherit; outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='{{ $errors->has('email') ? '#ef4444' : 'var(--border)' }}'">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.875rem;">
+                <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; color:var(--text-muted);">
+                    <input type="checkbox" name="remember" style="accent-color:var(--orange);"> Ingat saya
+                </label>
+                @if (Route::has('password.request'))
+                <a href="{{ route('password.request') }}" style="color:var(--orange); text-decoration:none; font-weight:500;">Lupa Password?</a>
+                @endif
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:0.875rem; font-size:1rem; margin-top:0.5rem;">Login</button>
+        </form>
+        
+        <div style="text-align:center; margin-top:2rem; font-size:0.875rem; color:var(--text-muted);">
+            Belum punya akun? <br>
+            <a href="{{ route('register') }}" style="color:var(--orange); font-weight:600; text-decoration:none; display:inline-block; margin-top:0.25rem;">Daftar di sini</a>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

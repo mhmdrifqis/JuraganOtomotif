@@ -245,11 +245,12 @@
 let compareList = JSON.parse(localStorage.getItem('compare') || '[]');
 
 function tambahBandingkan(id, nama) {
-    if (compareList.length >= 3) { alert('Maksimal 3 unit yang bisa dibandingkan.'); return; }
-    if (compareList.find(i => i.id === id)) { alert('Unit sudah ada di daftar perbandingan.'); return; }
+    if (compareList.length >= 3) { showToast('Maksimal 3 unit yang bisa dibandingkan.', 'error'); return; }
+    if (compareList.find(i => i.id === id)) { showToast('Unit sudah ada di daftar perbandingan.', 'error'); return; }
     compareList.push({ id, nama });
     localStorage.setItem('compare', JSON.stringify(compareList));
     updateCompareBar();
+    showToast('Tersimpan! ' + nama + ' ditambahkan ke perbandingan.');
 }
 
 function clearBandingkan() {
